@@ -1,118 +1,101 @@
-// src/pages/GameBoard.jsx
-import React, { useState } from "react";
-import {
-    Box,
-    Button,
-    Container,
-    Grid,
-    Paper,
-    Stack,
-    Typography,
-    useMediaQuery,
-    useTheme,
-} from "@mui/material";
-import BoardCell from "../components/game/BoardCell";
+import React from "react";
 
-const GameBoard = ({ username = "Player X" }) => {
-    const theme = useTheme();
-    const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+const GameBoard = () => {
+  return (
+    <div
+      style={{
+        maxWidth: "420px",
+        margin: "30px auto",
+        padding: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+        background: "#fafafa",
+      }}
+    >
+      {/* Header */}
+      <h2 style={{ textAlign: "center", marginBottom: "10px" }}>
+        Player X (You) vs Player O
+      </h2>
 
-    // Temporary UI board state (will be replaced by Nakama state)
-    const [board, setBoard] = useState([
-        ["", "", ""],
-        ["", "", ""],
-        ["", "", ""],
-    ]);
+      {/* Turn Indicator */}
+      <div
+        style={{
+          padding: "10px",
+          textAlign: "center",
+          fontSize: "17px",
+          background: "#eaeaea",
+          borderRadius: "8px",
+          marginBottom: "20px",
+        }}
+      >
+        Turn: Your Turn (X)
+      </div>
 
-    const [turn, setTurn] = useState("X");
-
-    //click handler (later will send move to Nakama)
-    const handleCellClick = (row, col) => {
-        console.log(`Clicked cell: row ${row}, col ${col}`);
-    };
-
-    return (
-        <Box
-            sx={{
-                minHeight: "100vh",
+      {/* Game Board UI (dummy) */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "8px",
+          marginBottom: "20px",
+        }}
+      >
+        {/* 9 static boxes */}
+        {Array(9)
+          .fill(null)
+          .map((_, i) => (
+            <div
+              key={i}
+              style={{
+                height: "100px",
+                fontSize: "28px",
+                fontWeight: "bold",
+                background: "#fff",
+                border: "2px solid #444",
+                borderRadius: "6px",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                bgcolor: "background.default",
-                px: 2,
-            }}
+              }}
+            >
+              {/* Dummy symbols to show UI look */}
+              {i === 0 ? "X" : i === 1 ? "O" : ""}
+            </div>
+          ))}
+      </div>
+
+      {/* Bottom Buttons */}
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          style={{
+            padding: "10px 15px",
+            background: "#f44336",
+            border: "none",
+            color: "white",
+            fontWeight: "bold",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
         >
-            <Container maxWidth="sm">
-                <Paper
-                    elevation={4}
-                    sx={{
-                        p: { xs: 3, sm: 4 },
-                        borderRadius: 3,
-                        textAlign: "center",
-                    }}
-                >
-                    {/* PLAYER HEADERS */}
-                    <Stack
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        sx={{ mb: 3 }}
-                    >
-                        <Typography variant={isSmall ? "body1" : "h6"} fontWeight={600}>
-                            Player X (You)
-                        </Typography>
+          Leave Game
+        </button>
 
-                        <Typography variant={isSmall ? "body1" : "h6"} fontWeight={600}>
-                            Player O
-                        </Typography>
-                    </Stack>
-
-                    {/* TURN INDICATOR */}
-                    <Typography
-                        variant={isSmall ? "body1" : "h6"}
-                        color="primary"
-                        sx={{ mb: 3 }}
-                        fontWeight={500}
-                    >
-                        Turn: {turn === "X" ? "Your Turn (X)" : "Opponent Turn (O)"}
-                    </Typography>
-
-                    {/* BOARD (3x3 GRID) */}
-                    <Box sx={{ my: 2 }}>
-                        <Grid container spacing={1}>
-                            {board.map((row, rowIndex) =>
-                                row.map((cell, colIndex) => (
-                                    <Grid item xs={4} key={`${rowIndex}-${colIndex}`}>
-                                        <BoardCell
-                                            value={cell}
-                                            isSmall={isSmall}
-                                            onClick={() => handleCellClick(rowIndex, colIndex)}
-                                        />
-                                    </Grid>
-                                ))
-                            )}
-                        </Grid>
-                    </Box>
-
-                    {/* BUTTONS */}
-                    <Stack
-                        direction={isSmall ? "column" : "row"}
-                        spacing={2}
-                        justifyContent="space-between"
-                        sx={{ mt: 3 }}
-                    >
-                        <Button variant="outlined" color="error" fullWidth>
-                            Leave Game
-                        </Button>
-
-                        <Button variant="contained" color="primary" fullWidth>
-                            Restart
-                        </Button>
-                    </Stack>
-                </Paper>
-            </Container>
-        </Box>
-    );
+        <button
+          style={{
+            padding: "10px 15px",
+            background: "#2196f3",
+            border: "none",
+            color: "white",
+            fontWeight: "bold",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          Restart
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default GameBoard;
