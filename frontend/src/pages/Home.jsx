@@ -160,6 +160,8 @@
 
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -172,8 +174,13 @@ import {
   useMediaQuery
 } from "@mui/material";
 
-const Home = () => {
-  const [username, setUsername] = useState("");
+
+
+const Home = ({ setUsername }) => {
+
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+
   const [roomCode, setRoomCode] = useState("");
 
   const theme = useTheme();
@@ -181,6 +188,8 @@ const Home = () => {
 
   const handlePlayOnline = () => {
     console.log("Play Online clicked");
+    setUsername(name);
+    navigate("/matchmaking");
   };
 
   const handleCreateRoom = () => {
@@ -236,8 +245,8 @@ const Home = () => {
             <TextField
               fullWidth
               size="small"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
               autoComplete="off"
               inputProps={{
