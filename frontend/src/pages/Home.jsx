@@ -250,7 +250,7 @@ const Home = ({ setUsername }) => {
               placeholder="Enter your name"
               autoComplete="off"
               inputProps={{
-                autoComplete: "new-password", // disables autosuggest COMPLETELY
+                autoComplete: "new-password", 
               }}
             />
           </Box>

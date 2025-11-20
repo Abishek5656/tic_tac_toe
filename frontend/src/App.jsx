@@ -1,8 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import React, { useState, lazy } from "react";
 
-import Home from "./pages/Home.jsx";
-import Matchmaking from "./pages/Matchmaking";
+// import Home from "./pages/Home.jsx";
+// import Matchmaking from "./pages/Matchmaking";
+
+const Matchmaking = React.lazy(() => import("./pages/Matchmaking.jsx"))
+const GameBoard   = React.lazy(() => import("./pages/GameBoard.jsx"));
+const Home        = React.lazy(() => import("./pages/Home.jsx"))
+
 
 function App() {
 
@@ -22,6 +27,17 @@ function App() {
           path="/matchmaking"
           element={<Matchmaking username={username} />}
         />
+
+        {/* GAME BOARD (future) */}
+        <Route
+          path="/game"
+          element={<GameBoard username={username} />}
+        />
+
+
+        
+
+
       </Routes>
     </BrowserRouter>
   );
