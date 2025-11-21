@@ -1,0 +1,17 @@
+console:
+  username: "admin"
+  password: "password"
+
+runtime:
+  js:
+    path: "/nakama/data/modules"
+
+session:
+  token_expiry_sec: 7200
+
+socket:
+  ping_period_ms: 5000
+  pong_timeout_ms: 15000
+
+logger:
+  level: "DEBUG"
