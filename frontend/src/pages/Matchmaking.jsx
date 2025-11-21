@@ -1,4 +1,3 @@
-// src/pages/Matchmaking.jsx
 import React, { useState, useEffect} from "react";
 import {
   Box,
@@ -27,6 +26,7 @@ const Matchmaking = ({ username = "Abishek"}) =>   {
   const navigate = useNavigate();
 
   const { socket, connectSocket } = useNakamaSocket();
+
   const [ticket, setTicket] = useState(null);
 
   const theme = useTheme();
@@ -38,23 +38,48 @@ const Matchmaking = ({ username = "Abishek"}) =>   {
     let value =  connectSocket(session);    
   }, [session]);
 
-  //Start matchmaking when socket is ready
+
   useEffect(() => {
-    if (!socket) return;
+  console.log("socket");
 
-    const run = async () => {
-      const newTicket = await startMatchmaking(socket);
-      setTicket(newTicket);
-    };
+  if (!socket) return;
 
-    run();
+  const run = async () => {
+    const newTicket = await startMatchmaking(socket);
+    console.log("💚 newTicket:", newTicket);
+    setTicket(newTicket);
+  };
 
-    // Match found listener
-    socket.onmatchmakermatched = (match) => {
-      navigate("/game", { state: { match } });
-    };
-  }, [socket]);
+  run();
 
+  socket.onmatchmakermatched = (match) => {
+    //console.log("MATCH FOUND:", match);
+    navigate("/game", { state: { match } });
+  };
+
+  return () => {
+   // console.log("cleanup");
+    socket.onmatchmakermatched = null;
+  };
+}, [socket]);
+
+
+const startMatchmaking = async (socket) => {
+  try {
+    const ticket = await socket.addMatchmaker(
+      "*",   // query must be a STRING
+      2,     // min players
+      2,     // max players
+      {}     // properties
+    );
+
+   // console.log("Matchmaker Ticket:", ticket);
+    return ticket;
+  } catch (err) {
+    // console.error("Matchmaker error:", err);
+    throw err;
+  }
+};
 
   const handleCancel = async () => {
     await cancelMatchmaking(socket, ticket);
