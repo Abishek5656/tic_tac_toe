@@ -92,6 +92,7 @@ const Home = lazy(() => import("./pages/Home.jsx"));
 const Matchmaking = lazy(() => import("./pages/Matchmaking.jsx"));
 const GameBoard = lazy(() => import("./pages/GameBoard.jsx"));
 const GameOver = lazy(() => import("./pages/GameOver.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound.jsx"))
 
 function App() {
   const [username, setUsername] = useState("");
@@ -168,6 +169,9 @@ function App() {
             }
           />
 
+          {/* 404 PAGE */}
+          <Route path="*" element={<NotFound />} />
+
         </Routes>
       </Suspense>
     </BrowserRouter>
@@ -184,7 +188,7 @@ const PageLayout = ({ children }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-  
+
         bgcolor: "#2d2d2d",
         px: { xs: 2, sm: 4 },
       }}
