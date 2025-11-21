@@ -18,7 +18,7 @@ import {
 import { useNakamaClient } from "../hooks/useNakamaClient";
 
 
-const Home = ({ setUsername }) => {
+const Home = ({ setUsername, username }) => {
 
 
   const { login } = useNakamaClient();
@@ -47,8 +47,10 @@ const Home = ({ setUsername }) => {
     return;
   }
 
+  setUsername(name)
+
   await login(name.trim());
-  navigate("/matchmaking");
+  navigate("/matchmaking", { state: { session } });
 };
 
 
@@ -60,7 +62,7 @@ const Home = ({ setUsername }) => {
     console.log("Joining room:", roomCode);
   };
 
-  return (
+  return (     
     <Container
       maxWidth="sm"
     >
@@ -98,8 +100,8 @@ const Home = ({ setUsername }) => {
             <TextField
               fullWidth
               size="small"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your name"
               autoComplete="off"
               inputProps={{
@@ -113,6 +115,7 @@ const Home = ({ setUsername }) => {
             fullWidth
             variant="contained"
             size={isMobile ? "medium" : "large"}
+             disabled={!username.trim()}
             onClick={handlePlayOnline}
           >
             Play Online
@@ -160,7 +163,7 @@ const Home = ({ setUsername }) => {
               <Button
                 variant="contained"
                 onClick={handleJoinRoom}
-                disabled={!roomCode}
+                disabled={!username}
                 fullWidth={isMobile}
               >
                 Join

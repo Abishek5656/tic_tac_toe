@@ -11,23 +11,55 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 
-const Matchmaking = ({ username = "Abishek", onCancel }) =>   {
+import { useLocation, useNavigate } from "react-router-dom";
+import { useNakamaSocket } from "../hooks/useNakamaSocket";
+import { startMatchmaking, cancelMatchmaking } from "../nakama/matchmaking";
+
+
+const Matchmaking = ({ username = "Abishek"}) =>   {
     
- const navigate = useNavigate();
+  const location = useLocation();
+  const session = location.state?.session;
+  const navigate = useNavigate();
+
+  const { socket, connectSocket } = useNakamaSocket();
+  const [ticket, setTicket] = useState(null);
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
+  //Connect WebSocket on load
+  useEffect(() => {
+    if (!session) return;
+    connectSocket(session);
+  }, [session]);
 
-  const handleCancel = () => {
+  //Start matchmaking when socket is ready
+  useEffect(() => {
+    if (!socket) return;
+
+    const run = async () => {
+      const newTicket = await startMatchmaking(socket);
+      setTicket(newTicket);
+    };
+
+    run();
+
+    // Match found listener
+    socket.onmatchmakermatched = (match) => {
+      navigate("/game", { state: { match } });
+    };
+  }, [socket]);
+
+
+  const handleCancel = async () => {
+    await cancelMatchmaking(socket, ticket);
     navigate("/");
   };
 
   return (
-
       <Container maxWidth="sm">
         <Paper
           elevation={4}

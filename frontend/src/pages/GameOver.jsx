@@ -27,8 +27,8 @@ const GameOver = ({
 
   // Determine message and emoji
   const getResultText = () => {
-    if (result === "win") return "🎉 YOU WIN!";
-    if (result === "lose") return "❌ YOU LOST!";
+    if (result === "win")  return  "🎉 YOU WIN!";
+    if (result === "lose") return  "❌ YOU LOST!";
     return "🤝 DRAW!";
   };
 

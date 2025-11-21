@@ -130,20 +130,21 @@ function App() {
           <Route
             path="/"
             element={
-              <PageLayout>
-                <Home setUsername={setUsername} />
-              </PageLayout>
-            }
+               <PageLayout>
+                <Home setUsername={setUsername} username={username} />
+               </PageLayout>
+               
+              }
           />
 
           {/* MATCHMAKING */}
           <Route
             path="/matchmaking"
             element={
-              <PageLayout>
-                <Matchmaking username={username} />
+               <PageLayout>
+                <Matchmaking username={username}  />
               </PageLayout>
-            }
+             }
           />
 
           {/* GAME SCREEN */}
