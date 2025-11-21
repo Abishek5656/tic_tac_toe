@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  cockroachdb:
+    image: cockroachdb/cockroach:v23.1.11
+    container_name: cockroachdb
+    command: start-single-node --insecure
+    ports:
+      - "26257:26257"   # DB port (Nakama connects to this)
+      - "8080:8080"     # Cockroach admin UI
+    volumes:
+      - ../cockroach-data:/cockroach/cockroach-data
+    restart: unless-stopped
+
+  nakama:
+    image: heroiclabs/nakama:3.22.0
+    container_name: nakama
+    depends_on:
+      - cockroachdb
+    entrypoint:
+      - "/bin/sh"
+      - "-ecx"
+      - >
+        /nakama/nakama
+        --name nakama1
+        --database.address "root@cockroachdb:26257?sslmode=disable"
+        --logger.level "DEBUG"
+        --console.port 7351
+        --config /nakama/data/nakama.yml
+    volumes:
+      - ../modules:/nakama/data/modules        # your JS game modules
+      - ../nakama.yml:/nakama/data/nakama.yml  # config file
+    ports:
+      - "7350:7350"  # Nakama server (HTTP/gRPC/WebSocket)
+      - "7351:7351"  # Nakama console UI
+    restart: unless-stopped
+
+  nakama-console:
+    image: heroiclabs/nakama-console:3.22.0
+    container_name: nakama-console
+    depends_on:
+      - nakama
+    environment:
+      - PORT=7351
+      - NAKAMA_HOST=nakama
+      - NAKAMA_PORT=7350
+      - NAKAMA_SERVER_KEY=defaultkey
+    ports:
+      - "7352:7351"   # Access console at http://localhost:7352
+    restart: unless-stopped
