@@ -1,0 +1,43 @@
+# ------------------------
+# Nakama / server files
+# ------------------------
+
+# Nakama generated logs
+*.log
+
+# Nakama migrations cache
+migrations/*.lock
+migrations/*.bak
+
+# Nakama console files (if any)
+*.console
+
+# ------------------------
+# Docker / container files
+# ------------------------
+
+# Docker volumes and temporary data
+cockroach-data/
+docker-compose.override.yml
+*.env
+
+# ------------------------
+# OS & editor files
+# ------------------------
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Node.js / npm (if using Nakama console frontend)
+node_modules/
+
+# VSCode
+.vscode/
+
+# Temporary files
+*.tmp
+*.swp
