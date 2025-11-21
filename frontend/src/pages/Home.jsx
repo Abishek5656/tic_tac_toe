@@ -203,13 +203,6 @@ const Home = ({ setUsername }) => {
   return (
     <Container
       maxWidth="sm"
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        px: { xs: 2, sm: 4 },
-      }}
     >
       <Paper
         elevation={4}

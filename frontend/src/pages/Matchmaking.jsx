@@ -27,16 +27,7 @@ const Matchmaking = ({ username = "Abishek", onCancel }) =>   {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        bgcolor: "background.default",
-        px: 2,
-      }}
-    >
+
       <Container maxWidth="sm">
         <Paper
           elevation={4}
@@ -90,7 +81,6 @@ const Matchmaking = ({ username = "Abishek", onCancel }) =>   {
           </Box>
         </Paper>
       </Container>
-    </Box>
   );
 };
 
