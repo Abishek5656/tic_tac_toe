@@ -1,5 +1,5 @@
 // src/pages/Matchmaking.jsx
-import React from "react";
+import React, { useState, useEffect} from "react";
 import {
   Box,
   Button,
@@ -21,7 +21,9 @@ import { startMatchmaking, cancelMatchmaking } from "../nakama/matchmaking";
 const Matchmaking = ({ username = "Abishek"}) =>   {
     
   const location = useLocation();
+
   const session = location.state?.session;
+
   const navigate = useNavigate();
 
   const { socket, connectSocket } = useNakamaSocket();
@@ -33,7 +35,7 @@ const Matchmaking = ({ username = "Abishek"}) =>   {
   //Connect WebSocket on load
   useEffect(() => {
     if (!session) return;
-    connectSocket(session);
+    let value =  connectSocket(session);    
   }, [session]);
 
   //Start matchmaking when socket is ready

@@ -12,7 +12,7 @@ export const useNakamaSocket = () => {
 
       await newSocket.connect(session);
 
-      console.log("WebSocket connected to Nakama");
+      console.log("socket connected");
 
       setSocket(newSocket);
       return newSocket;

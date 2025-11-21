@@ -13,8 +13,5 @@ export const useNakamaClient = () => {
     return newSession;
   };
 
-
-  console.log("loginp---",login)
-
   return { session, login };
 };

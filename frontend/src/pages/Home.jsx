@@ -21,36 +21,29 @@ import { useNakamaClient } from "../hooks/useNakamaClient";
 const Home = ({ setUsername, username }) => {
 
 
-  const { login } = useNakamaClient();
+  const { login, session } = useNakamaClient();
 
   const navigate = useNavigate();
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
 
   const [roomCode, setRoomCode] = useState("");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // const handlePlayOnline = async () => {
-
-  //   console.log("@@@")
-  //   await login(name);
-  //   navigate("/matchmaking");
-  // }
-
 
   const handlePlayOnline = async () => {
-  console.log("Name entered:", name);
-
-  if (!name || name.trim().length === 0) {
+ 
+  if (!username || username.trim().length === 0) {
     alert("Please enter a username first.");
     return;
   }
 
-  setUsername(name)
+  setUsername(username)
 
-  await login(name.trim());
-  navigate("/matchmaking", { state: { session } });
+  const newSession = await login(username.trim());
+
+ navigate("/matchmaking", { state: { session: newSession } });
 };
 
 
