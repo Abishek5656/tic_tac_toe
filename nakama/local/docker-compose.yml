@@ -1,34 +1,46 @@
-version: "3.9"
+networks:
+  nakama-network:
+    driver: bridge
 
 services:
   cockroachdb:
     image: cockroachdb/cockroach:v23.1.11
     container_name: cockroachdb
     command: start-single-node --insecure
+    networks:
+      - nakama-network
     ports:
-      - "26257:26257"  # SQL
-      - "8080:8080"    # Admin UI
+      - "26257:26257"
+      - "8080:8080"
     volumes:
-      - ./cockroach-data:/cockroach/cockroach-data
+      - ../cockroach-data:/cockroach/cockroach-data
     restart: unless-stopped
 
   nakama:
     image: heroiclabs/nakama:3.22.0
     container_name: nakama
-    entrypoint: >
-      /bin/sh -c "
-      echo 'Waiting for CockroachDB to be ready...' &&
-      until nc -z cockroachdb 26257; do
-        sleep 1
-      done &&
-      echo 'Initializing Nakama schema...' &&
-      /nakama/nakama migrate up --database.address cockroachdb:26257 --database.user root --database.name nakama &&
-      echo 'Starting Nakama server...' &&
-      /nakama/nakama --name nakama1 --database.address cockroachdb:26257 --database.user root --database.name nakama --logger.level DEBUG
-      "
-    ports:
-      - "7350:7350"  # Nakama client & server API
-      - "7351:7351"  # Nakama console/admin
     depends_on:
       - cockroachdb
+    networks:
+      - nakama-network
+    entrypoint:
+      - "/bin/sh"
+      - "-ecx"
+      - |
+        # Run migrations first
+        /nakama/nakama migrate up --database.address "root@cockroachdb:26257?sslmode=disable"
+
+        # Start Nakama server
+        /nakama/nakama \
+          --name nakama1 \
+          --database.address "root@cockroachdb:26257?sslmode=disable" \
+          --logger.level DEBUG \
+          --console.port 7351 \
+          --config /nakama/data/nakama.yml
+    volumes:
+      - ../modules:/nakama/data/modules
+      - ../nakama.yml:/nakama/data/nakama.yml
+    ports:
+      - "7350:7350"
+      - "7351:7351"
     restart: unless-stopped
